@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{css/login.css}" rel="stylesheet"/>
+    <title>Add Category</title>
+</head>
+<body>
+
+<header th:replace="fragments/header :: navbar"></header>
+
+<span th:text="${msg}"></span>
+<form th:action="@{/proc/addProductCategory}" th:object="${ProductCategory}" method="post" style="border:1px solid #ccc">
+    <div class="container">
+        <h1>Add Category</h1>
+        <hr>
+        <label><b>Name</b></label>
+        <input type="text" th:field="*{categoryName}" placeholder="Enter category of product" name="cname" required>
+
+        <div class="clearfix">
+            <button type="submit" class="signupbtn">Add Product</button>
+        </div>
+    </div>
+</form>
+<footer th:insert="fragments/header :: sessioninfo"></footer>
+</body>
+</html>

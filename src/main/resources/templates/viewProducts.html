@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{css/login.css}" rel="stylesheet"/>
+    <title>Add Product</title>
+</head>
+<body>
+
+<header th:replace="fragments/header :: navbar"></header>
+
+<!--<h2>Welcome, <span th:text="${user}"></span></h2>-->
+<span th:text="${msg}"></span>
+<table>
+    <tr>
+        <th>productName</th>
+        <th>productCategory</th>
+        <th>productQuantity</th>
+        <th>productPrice</th>
+        <th>productDescription</th>
+        <th>productImage</th>
+        <th>Place Order</th>
+    </tr>
+    <tr th:each="prod:${ProductList}">
+        <td th:text="${prod.productName}"></td>
+        <td th:text="${prod.productCategory}"></td>
+        <td th:text="${prod.productQuantity}"></td>
+        <td th:text="${prod.productPrice}"></td>
+        <td th:text="${prod.productDescription}"></td>
+        <td><img th:src="${product.productImage}" width="50px" height="50px"/></td>
+        <td><a th:href="@{/placeOrder/{pid} (pid=${prod.productId}) }">
+            Place Order</a>
+        <form action="@{/placeOrder}">
+            <input type="hidden" value=""></input>
+        </form>
+        </td>
+    </tr>
+</table>
+<footer th:insert="fragments/header :: sessioninfo"></footer>
+</body>
+</html>

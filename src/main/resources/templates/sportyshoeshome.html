@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{css/login.css}" rel="stylesheet"/>
+    <title>SignIn</title>
+</head>
+<h1>Welcome, <span th:text="${user.lastname}"></span>!</h1>
+<p>Your email address is: <span th:text="${user.email}"></span></p>
+<p>Your password is: <span th:text="${user.password}"></span></p>
+<p>Your firstname is: <span th:text="${user.firstname}"></span></p>
+</body>
+</html>

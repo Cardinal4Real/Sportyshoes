@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{css/login.css}" rel="stylesheet"/>
+    <title>SignUp</title>
+</head>
+<body>
+<h2 th:text="${signUpResult}" style="color:red"></h2>
+
+<form th:action="@{/signUp}" th:object="${SignUp}" method="post" style="border:1px solid #ccc">
+    <div class="container">
+        <h1>Sign Up</h1>
+        <hr>
+        <label><b>FirstName</b></label>
+        <input type="text" th:field="*{firstname}" placeholder="Enter first name" name="fname" required>
+
+        <label><b>LastName</b></label>
+        <input type="text" th:field="*{lastname}" placeholder="Enter last name" name="lname" required>
+
+        <label><b>PhoneNumber</b></label>
+        <input type="text" th:field="*{phonenumber}" placeholder="Enter phone number" name="phonenumber" required>
+
+        <label><b>Address</b></label>
+        <input type="text" th:field="*{address}"placeholder="Enter address" name="address" required>
+
+        <label><b>Email</b></label>
+        <input type="text" th:field="*{email}" placeholder="Enter email" name="email" required>
+
+        <label><b>Password</b></label>
+        <input type="password" th:field="*{password}" placeholder="Enter Password" name="password" required>
+
+        <label>
+            <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
+        </label>
+
+        <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+
+        <div class="clearfix">
+            <a th:href="@{/signInUser}" class="cancelbtn">An existing user? Login</a>
+            <button type="submit" class="signupbtn">Sign Up</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>

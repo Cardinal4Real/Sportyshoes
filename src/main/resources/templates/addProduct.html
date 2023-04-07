@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{css/login.css}" rel="stylesheet"/>
+    <title>Add Product</title>
+</head>
+<body>
+
+<header th:replace="fragments/header :: navbar"></header>
+
+<h2>Welcome, <span th:text="${user}"></span></h2>
+<span th:text="${msg}"></span>
+<form th:action="@{/proc/addProduct}" th:object="${Product}" method="post" style="border:1px solid #ccc">
+    <div class="container">
+        <h1>Add Product</h1>
+        <hr>
+        <label><b>Name</b></label>
+        <input type="text" th:field="*{productName}" placeholder="Enter name of product" name="pname" required>
+
+        <label><b>Category</b></label>
+            <select th:field="*{productCategory}">
+                <option value="">--Select Category--</option>
+                <option th:each="cat:${ProductCategory}" th:value="${cat.categoryId}">
+                    <span th:text="${cat.categoryName}"></span>
+                </option>
+            </select><br/>
+    <label><b>Quantity</b></label>
+        <input type="text" th:field="*{productQuantity}" placeholder="Enter quantity in stock" name="pquantity" required>
+
+        <label><b>Price</b></label>
+        <input type="text" th:field="*{productPrice}"placeholder="Enter price of product" name="pprice" required>
+
+        <label><b>Image</b></label>
+        <input type="text" th:field="*{productImage}" placeholder="Enter link to image here" name="pimage" required>
+
+        <label><b>Description</b></label>
+        <input type="text" th:field="*{productDescription}"placeholder="Enter description of product" name="pdescription" required>
+
+        <div class="clearfix">
+            <button type="submit" class="signupbtn">Add Product</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>
