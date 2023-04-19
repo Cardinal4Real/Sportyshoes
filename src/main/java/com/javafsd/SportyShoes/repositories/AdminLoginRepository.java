@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdminLoginRepository extends JpaRepository<AdminLogin,Long> {
     public AdminLogin findOneByEmailAndPassword(String email, String password);
+    public AdminLogin findOneByEmail(String email);
 }

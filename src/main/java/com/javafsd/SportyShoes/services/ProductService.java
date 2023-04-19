@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ProductService {
     @Autowired
@@ -16,7 +18,9 @@ public class ProductService {
         productRepository.save(product);
         return "Product stored";
     }
-
+    public Optional<Product> findOneProduct(String id) {
+        return productRepository.findById(Long.valueOf(id));
+    }
     public List<Product> findAllProducts() {
         return productRepository.findAll();
     }

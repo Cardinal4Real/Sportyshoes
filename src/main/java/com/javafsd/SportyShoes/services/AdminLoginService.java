@@ -22,4 +22,11 @@ public class AdminLoginService {
         return adminLoginRepository.findOneByEmailAndPassword(signInDto.getEmail(), signInDto.getPassword());
 
     }
+
+    public String changePwd(SignInDto signInDto) {
+        AdminLogin adminLogin=adminLoginRepository.findOneByEmail(signInDto.getEmail());
+        adminLogin.setPassword(signInDto.getPassword());
+        adminLoginRepository.save(adminLogin);
+        return "Password changed successfully";
+    }
 }

@@ -53,10 +53,10 @@ public class CustomerLoginController {
             model.addAttribute("error","E-mail or password invalid");
             return "signIn";
         }else{
-            session.setAttribute("userdetails",signInResult);
+            session.setAttribute("sessionuser",signInResult);
             model.addAttribute("user",signInResult);
             System.out.println(signInResult);
-            return "sportyshoeshome";
+            return "adminHome"; //for the time mean change to sportyshoeshome
         }
     }
     @GetMapping("/signInUser")

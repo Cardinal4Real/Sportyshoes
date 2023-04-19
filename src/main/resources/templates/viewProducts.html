@@ -30,10 +30,11 @@
         <td th:text="${prod.productPrice}"></td>
         <td th:text="${prod.productDescription}"></td>
         <td><img th:src="${product.productImage}" width="50px" height="50px"/></td>
-        <td><a th:href="@{/placeOrder/{pid} (pid=${prod.productId}) }">
-            Place Order</a>
-        <form action="@{/placeOrder}">
-            <input type="hidden" value=""></input>
+        <td><!--<a th:href="@{/placeOrder/{pid} (pid=${prod.productId}) }">
+            Place Order</a>-->
+        <form th:action="@{/placeOrder}" method="post">
+            <input type="hidden" th:value="${prod.productId}" name="productID"></input>
+            <input type="submit" value="Place Order"></input>
         </form>
         </td>
     </tr>

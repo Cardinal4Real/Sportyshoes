@@ -2,6 +2,7 @@ package com.javafsd.SportyShoes.controllers;
 
 import com.javafsd.SportyShoes.dtos.SignInDto;
 import com.javafsd.SportyShoes.entities.AdminLogin;
+import com.javafsd.SportyShoes.entities.Customer;
 import com.javafsd.SportyShoes.services.AdminLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,5 +42,22 @@ public class AdminLoginController {
             System.out.println(signInResult);
             return "adminHome";
         }
+    }
+    @GetMapping("/changePassword")
+    public String adminChangePwd(SignInDto signInDto,Model model,HttpSession session){
+        Customer customer=((Customer)session.getAttribute("sessionuser"));
+        signInDto.setEmail(customer.getEmail());
+        signInDto.setPassword(customer.getPassword());
+        model.addAttribute("userEmail",customer.getEmail());
+        model.addAttribute("SignInDto", signInDto);
+        return "changePwd";
+    }
+
+    @PostMapping("proc/changePwd")
+    public String procPwdChange(@ModelAttribute SignInDto signInDto,Model model) {
+        String resp=adminLoginService.changePwd(signInDto);
+        model.addAttribute("SignInDto",new SignInDto());
+        model.addAttribute("msg",resp);
+        return "changePwd";
     }
 }

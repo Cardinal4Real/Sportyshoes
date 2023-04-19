@@ -22,11 +22,59 @@ public class Order {
     @JoinColumn(name = "customerid")
     private Customer customer;
     @Column(name = "orderquantity")
-    private Integer orderQuantity;
+    private int orderQuantity;
     @Column(name = "orderprice")
-    private Float orderPrice;
+    private double orderPrice;
     @Column(name = "ordertotal")
-    private Float orderTotal;
+    private double orderTotal;
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public int getOrderQuantity() {
+        return orderQuantity;
+    }
+
+    public void setOrderQuantity(int orderQuantity) {
+        this.orderQuantity = orderQuantity;
+    }
+
+    public double getOrderPrice() {
+        return orderPrice;
+    }
+
+    public void setOrderPrice(double orderPrice) {
+        this.orderPrice = orderPrice;
+    }
+
+    public double getOrderTotal() {
+        return orderTotal;
+    }
+
+    public void setOrderTotal(double orderTotal) {
+        this.orderTotal = orderTotal;
+    }
 
     @Override
     public String toString() {

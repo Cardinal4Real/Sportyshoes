@@ -18,6 +18,7 @@ public class AdminLogin {
     private String email;
     private String password;
 
+
 /*    public AdminSignInEntity(SignUpDto signUpDto) {
         this.firstName= signUpDto.getFirstName();
         this.lastName= signUpDto.getLastName();
