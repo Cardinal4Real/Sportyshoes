@@ -21,6 +21,12 @@ public class OrderService {
         orderRepository.save(order);
         return "Order stored";
     }
+    public void deleteOrder(Long orderId){
+        orderRepository.deleteById(orderId);
+    }
+    public void deleteOrderList(List<Order> orderList){
+        orderRepository.deleteAll(orderList);
+    }
     public String calcOrderNstore(Order order){
         if(order!=null){
             double totalPrice=order.getOrderQuantity() * order.getOrderPrice();
@@ -38,4 +44,8 @@ public class OrderService {
     public List<Order> findCustomerOrder(Customer customer) {
         return orderRepository.findAllByCustomer(customer);
     }
+    public void deleteCustomerOrders(Customer customer){
+        orderRepository.deleteAllByCustomer(customer);
+    }
+
 }

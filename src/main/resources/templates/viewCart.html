@@ -8,8 +8,8 @@
     <title>View Cart</title>
 </head>
 <body>
-
-<header th:replace="fragments/header :: navbar"></header>
+<span th:text="${cquantity}" style="color:red"></span>
+<header th:replace="fragments/headerCustomer :: navbar"></header>
 
 <h2>Welcome, <span th:text="${user}"></span></h2>
 <span th:text="${msg}"></span>
@@ -27,14 +27,18 @@
         <td th:text="${order.orderQuantity}"></td>
         <td th:text="${order.orderPrice}"></td>
         <td th:text="${order.orderTotal}"></td>
-
-<!--        <form th:action="@{/makePayment}" method="post">
-            <input type="hidden" th:value="${prod.productId}" name="productID"></input>
-            <input type="submit" value="Place Order"></input>
-        </form>-->
+        <td><a th:href="@{/deleteOrder/{orderId}(orderId=${order.orderId})}">Remove from cart</a></td>
+        <!--<td><a th:href="@{/deleteOrder/${order.orderId}}">Delete</a></td>-->
+        <!--The above commented code will not place the orderId as a pathvariable. It will make it the actual URL you are going to-->
 
     </tr>
 </table>
 <h2>Total Order: <span th:text="${orderTotal}"></span></h2>
+<span>
+<form th:action="@{/checkoutOrder}" method="post">
+    <input type="hidden" th:value="${orderTotal}" name="orderTotal" ></input>
+    <input type="submit" value="Checkout"></input>
+</form>
+</span>
 </body>
 </html>

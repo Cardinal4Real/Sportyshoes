@@ -4,7 +4,11 @@ import com.javafsd.SportyShoes.dtos.SignInDto;
 import com.javafsd.SportyShoes.entities.Customer;
 import com.javafsd.SportyShoes.repositories.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class CustomerLoginService {
@@ -12,7 +16,8 @@ public class CustomerLoginService {
     CustomerRepository customerRepository;
 
     public String signUp(Customer customer) {
-        Customer findEmail=(customer !=null)? customerRepository.findFirstByEmail(customer.getEmail()):null;
+        //Customer findEmail=(customer !=null)? customerRepository.findFirstByEmail(customer.getEmail()):null;
+        Customer findEmail=findCustomer(customer);
         Customer saveEntity=(findEmail==null)? customerRepository.save(customer):null;
         return (saveEntity==null)?"Email already exists":"SignUp successful";
     }
@@ -24,5 +29,15 @@ public class CustomerLoginService {
         }else{
             return null;
         }
+    }
+    public Customer findCustomer(Customer customer) {
+        Customer dynamicCustomer=(customer !=null)? customerRepository.findFirstByEmail(customer.getEmail()):null;
+        return dynamicCustomer;
+    }
+    public Customer findCustomerByEmail(String email) {
+        return customerRepository.findFirstByEmail(email);
+    }
+    public List<Customer> displayAllCustomers() {
+        return customerRepository.findAll();
     }
 }

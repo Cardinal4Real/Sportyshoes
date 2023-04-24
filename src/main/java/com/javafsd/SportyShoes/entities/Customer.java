@@ -48,7 +48,7 @@ public class Customer {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", listOfOrders=" + listOfOrders +
+                //", listOfOrders=" + listOfOrders +
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +

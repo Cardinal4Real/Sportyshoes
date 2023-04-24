@@ -43,12 +43,21 @@ public class AdminLoginController {
             return "adminHome";
         }
     }
-    @GetMapping("/changePassword")
+/*    @GetMapping("/changePassword")
     public String adminChangePwd(SignInDto signInDto,Model model,HttpSession session){
         Customer customer=((Customer)session.getAttribute("sessionuser"));
         signInDto.setEmail(customer.getEmail());
         signInDto.setPassword(customer.getPassword());
         model.addAttribute("userEmail",customer.getEmail());
+        model.addAttribute("SignInDto", signInDto);
+        return "changePwd";
+    }*/
+    @GetMapping("/changePassword")
+    public String adminChangePwd(SignInDto signInDto,Model model,HttpSession session){
+        AdminLogin adminLogin=((AdminLogin)session.getAttribute("sessionuser"));
+        signInDto.setEmail(adminLogin.getEmail());
+        signInDto.setPassword(adminLogin.getPassword());
+        model.addAttribute("userEmail",adminLogin.getEmail());
         model.addAttribute("SignInDto", signInDto);
         return "changePwd";
     }

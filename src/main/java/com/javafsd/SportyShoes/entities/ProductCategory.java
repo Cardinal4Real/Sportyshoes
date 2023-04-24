@@ -18,7 +18,10 @@ public class ProductCategory {
     private Long categoryId;
     @Column(name = "categoryname")
     private String categoryName;
-    @OneToMany(mappedBy = "productCategory")
+    @Lob
+    @Column(name = "categoryimage")
+    private String categoryImage;
+    @OneToMany(mappedBy = "productCategory",fetch = FetchType.EAGER)
     private List<Product> listOfProducts;
 
     @Override
@@ -26,7 +29,7 @@ public class ProductCategory {
         return "ProductCategory{" +
                 "categoryId=" + categoryId +
                 ", categoryName='" + categoryName + '\'' +
-                //", listOfProducts=" + listOfProducts +
+                ", categoryImage='" + categoryImage + '\'' +
                 '}';
     }
 }

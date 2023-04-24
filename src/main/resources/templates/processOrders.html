@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{css/login.css}" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" />
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+    <script src="/webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <title>Add Product</title>
+</head>
+<body>
+<span th:text="${cquantity}" style="color:red"></span>
+<header th:replace="fragments/header :: navbar"></header>
+
+<h1>Purchase Report</h1>
+<p>Filtered by category: <b th:text="${categoryName}"></b></p>
+<p>Between dates: <b th:text="${startDate}"></b> and <b th:text="${endDate}"></b></p>
+
+<form action="#" th:action="@{/submit}" method="post">
+    <div class="form-group">
+        <label for="datePicker">Select a date:</label>
+        <div class="input-group date">
+            <input type="text" class="form-control" id="datePicker" name="selectedDate" th:value="${selectedDate}" />
+            <div class="input-group-append">
+                <span class="input-group-text">
+                    <i class="fa fa-calendar"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<p><a th:href="@{/pendingOrders}">Orders Pending</a></p>
+<table>
+    <thead>
+    <tr>
+        <th>Firstname</th>
+        <th>Last Name</th>
+        <th>Product</th>
+         <th>Price</th>
+        <th>Quantity</th>
+        <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="orders : ${pendingOrderList}">
+        <td th:text="${orders.customer.firstName}"></td>
+        <td th:text="${orders.customer.lastName}"></td>
+        <td th:text="${orders.product.productName}"></td>
+        <td th:text="${orders.orderPrice}"></td>
+        <td th:text="${orders.orderQuantity}"></td>
+        <td th:text="${orders.orderTotal}"></td>
+<!--        <td th:text="${result[4]}"></td>
+        <td th:text="${result[5]}"></td>
+        <td th:text="${result[6]}"></td>-->
+    </tr>
+    </tbody>
+</table>
+<table>
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Product</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="result : ${results}">
+        <td th:text="${#dates.format(result[0], 'dd/MM/yyyy HH:mm:ss')}"></td>
+        <td th:text="${result[1]}"></td>
+        <td th:text="${result[2]}"></td>
+        <td th:text="${result[3]}"></td>
+        <td th:text="${result[4]}"></td>
+        <td th:text="${result[5]}"></td>
+        <td th:text="${result[6]}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -24,13 +24,13 @@ public class Product {
     @Column(name = "productquantity")
     private int productQuantity;
     @Column(name = "productprice")
-    private float productPrice;
+    private double productPrice;
     @Column(name = "productdescription")
     private String productDescription;
     @Lob
     @Column(name = "productimage")
     private String productImage;
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
     private List<Order> listOfOrders;
 /*    @Column(name="productdiscountpercentage")
     private float productDiscountPercentage;

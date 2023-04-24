@@ -2,7 +2,9 @@ package com.javafsd.SportyShoes.controllers;
 
 import com.javafsd.SportyShoes.dtos.SignInDto;
 import com.javafsd.SportyShoes.entities.Customer;
+import com.javafsd.SportyShoes.entities.ProductCategory;
 import com.javafsd.SportyShoes.services.CustomerLoginService;
+import com.javafsd.SportyShoes.services.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,11 +13,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class CustomerLoginController {
     @Autowired
     CustomerLoginService customerLoginService;
+    @Autowired
+    ProductCategoryService productCategoryService;
 /*    @GetMapping("/")
     public String landingpage(SignUpDto signUpDto, Model model){
         model.addAttribute("SignUp", signUpDto);
@@ -48,15 +54,18 @@ public class CustomerLoginController {
     }
     @PostMapping("/signIn")
     public String signIn(@ModelAttribute SignInDto signInDto, Model model, HttpSession session){
-        Customer signInResult=customerLoginService.signIn(signInDto);
-        if(signInResult==null){
+        Customer customer=customerLoginService.signIn(signInDto);
+        if(customer==null){
             model.addAttribute("error","E-mail or password invalid");
             return "signIn";
         }else{
-            session.setAttribute("sessionuser",signInResult);
-            model.addAttribute("user",signInResult);
-            System.out.println(signInResult);
-            return "adminHome"; //for the time mean change to sportyshoeshome
+            session.setAttribute("sessionuser",customer);
+            String cartQuantity=customer.getListOfOrders().size()>0? String.valueOf(customer.getListOfOrders().size()) :"";
+            List<ProductCategory> productCategoryList=productCategoryService.findAllProductCategory();
+            model.addAttribute("user",customer.getEmail());
+            model.addAttribute("cquantity",cartQuantity);
+            model.addAttribute("productCategoryList",productCategoryList);
+            return "sportyshoeshome";
         }
     }
     @GetMapping("/signInUser")
@@ -64,5 +73,26 @@ public class CustomerLoginController {
         Customer customer =new Customer();
         model.addAttribute("user", customer);
         return "signIn";
+    }
+    @GetMapping("/signOut")
+    public String signOut(HttpSession session){
+        session.invalidate();
+        return "signIn";
+    }
+    @GetMapping("/viewUsers")
+    public String listCustomers(Model model){
+        List<Customer> allUsers=customerLoginService.displayAllCustomers();
+        model.addAttribute("allUsers",allUsers);
+        return "viewUsers";
+    }
+    @PostMapping("/searchCustomer")
+    public String searchCustomer(@ModelAttribute("email") String email, Model model){
+        Optional<Customer> found= Optional.ofNullable(customerLoginService.findCustomerByEmail(email));
+        if(found.isPresent()){
+            System.out.println("customer found");
+            Customer customerfound=found.get();
+            model.addAttribute("found",customerfound);
+        }
+        return "viewUsers";
     }
 }

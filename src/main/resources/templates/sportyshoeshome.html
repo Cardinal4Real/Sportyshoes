@@ -7,9 +7,15 @@
     <link th:href="@{css/login.css}" rel="stylesheet"/>
     <title>SignIn</title>
 </head>
-<h1>Welcome, <span th:text="${user.lastname}"></span>!</h1>
-<p>Your email address is: <span th:text="${user.email}"></span></p>
-<p>Your password is: <span th:text="${user.password}"></span></p>
-<p>Your firstname is: <span th:text="${user.firstname}"></span></p>
+<body>
+<!--<header th:replace="fragments/headerCustomer :: navbar"></header>-->
+<span th:text="${cquantity}"></span>
+<h1>Welcome, <span th:text="${user}"></span>!</h1>
+<table>
+    <tr th:each="prodCat:${productCategoryList}">
+        <td th:text="${prodCat.categoryName}"></td>
+        <td><a th:href="@{/viewProduct/{cId}(cId=${prodCat.categoryId})}"><img th:src="${prodCat.categoryImage}" width="50px" height="50px"/></a></td>
+    </tr>
+</table>
 </body>
 </html>

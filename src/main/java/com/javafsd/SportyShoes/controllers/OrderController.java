@@ -1,29 +1,28 @@
 package com.javafsd.SportyShoes.controllers;
 
-import com.javafsd.SportyShoes.entities.Customer;
-import com.javafsd.SportyShoes.entities.Order;
-import com.javafsd.SportyShoes.entities.Product;
-import com.javafsd.SportyShoes.entities.ProductCategory;
-import com.javafsd.SportyShoes.services.OrderService;
-import com.javafsd.SportyShoes.services.ProductCategoryService;
-import com.javafsd.SportyShoes.services.ProductService;
+import com.javafsd.SportyShoes.entities.*;
+import com.javafsd.SportyShoes.services.*;
+import com.javafsd.SportyShoes.utilities.HelperClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class OrderController {
     @Autowired
     OrderService orderService;
     @Autowired
+    Order_CheckedOutService orderCheckedOutService;
+    @Autowired
     ProductService productService;
+    @Autowired
+    HelperClass helperClass;
     @PostMapping("/placeOrder")
     public String placeOrder(@ModelAttribute("productID") String productid, HttpSession session, Model model){
         String npage="signIn";
@@ -44,36 +43,73 @@ public class OrderController {
         return npage;
     }
     @PostMapping("/proc/addOrder")
-    public String storeProduct(@ModelAttribute Order order, Model model,Product product){
-        System.out.println("Order quantity "+order.getOrderQuantity());
-        System.out.println("Trying to store product");
+    public String storeProduct(@ModelAttribute Order order, HttpSession session, Model model){
         String addOrderResult=orderService.calcOrderNstore(order);
-        //System.out.println(order.getProduct().getProductName());
+        String cartQuantity= helperClass.cartHelper(session);
         List<Product> productList=productService.findAllProducts();
         String msg=addOrderResult.isEmpty()?"":"Order added to cart";
         model.addAttribute("msg",msg);
         model.addAttribute("ProductList",productList);
+        model.addAttribute("cquantity",cartQuantity);
         return "viewProducts";
     }
     @GetMapping("/viewCart")
     public String viewCart(HttpSession session,Model model){
-        Customer customer=((Customer)session.getAttribute("sessionuser"));
-        //model.addAttribute("userDetails",customer);
-        double orderTotal=orderService.calcTotalOrder(customer.getListOfOrders());
-        model.addAttribute("user",customer.getEmail());
-        model.addAttribute("orderList",customer.getListOfOrders());
-        model.addAttribute("orderTotal",orderTotal);
+        Optional<Customer> customerOpt=helperClass.findCustomer(session);
+        if(customerOpt.isPresent()){
+            Customer customer=customerOpt.get();
+            String cartQuantity=customer.getListOfOrders().size()>0? String.valueOf(customer.getListOfOrders().size()) :"";
+            double orderTotal=(customer.getListOfOrders().size()>0)?orderService.calcTotalOrder(customer.getListOfOrders()):0;
+            model.addAttribute("user",customer.getEmail());
+            model.addAttribute("orderList",customer.getListOfOrders());
+            model.addAttribute("orderTotal",orderTotal);
+            model.addAttribute("cquantity",cartQuantity);
+        }
         return "viewCart";
     }
+    @GetMapping("/deleteOrder/{orderId}")
+    public String deleteOrder(@PathVariable Long orderId,HttpSession session, Model model){
+        orderService.deleteOrder(orderId);
+        String view=viewCart(session,model);
+        return view;
+    }
 
-/*    @GetMapping("/makePayment")
-    public String orderPayment(Product product,Model model){
-        List<Product> productList=productService.findAllProducts();
-        String msg=productList.size()>0?"":"No products to display";
-        System.out.println(productList);
-        model.addAttribute("msg",msg);
-        //model.addAttribute("user","");
-        model.addAttribute("ProductList",productList);
-        return "viewProducts";
-    }*/
+   @PostMapping("/checkoutOrder")
+    public String checkOutOrder(@RequestParam("orderTotal") double total, HttpSession session, Model model){
+       Optional<Customer> customerOpt=helperClass.findCustomer(session);
+       if(customerOpt.isPresent()){
+           Customer customer=customerOpt.get();
+           List<Order> listOfCustomerOrder=orderService.findCustomerOrder(customer);
+           if(listOfCustomerOrder.size()>0){
+              List<Order_CheckedOut> checkedOutList =
+                      listOfCustomerOrder.stream().map(Order->new Order_CheckedOut(Order)).collect(Collectors.toList());
+                orderCheckedOutService.saveAllOrders(checkedOutList);
+                orderService.deleteOrderList(listOfCustomerOrder);
+           }
+       System.out.printf("Total is %s",total);
+           System.out.println(listOfCustomerOrder);
+           System.out.println(listOfCustomerOrder.size());
+       System.out.println(customer);
+       model.addAttribute("msg","Payment received...Thanks for shopping with us");
+       }
+       return "checkOutConfirmation";
+   }
+
+    @GetMapping("/processOrders")
+    public String processOrders(HttpSession session, Model model){
+        //orderService
+        //String view=viewCart(session,model);
+        return "processOrders";
+    }
+
+    @GetMapping("/pendingOrders")
+    public String pendingOrders(HttpSession session, Model model){
+        //orderService
+        //String view=viewCart(session,model);
+        System.out.println("Pending Orders invoked");
+        List<Order_CheckedOut> pendingOrders=orderCheckedOutService.findPendingOrders("Processing");
+        System.out.println(pendingOrders);
+        model.addAttribute("pendingOrderList",pendingOrders);
+        return "processOrders";
+    }
 }

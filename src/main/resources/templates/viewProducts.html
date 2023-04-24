@@ -8,34 +8,49 @@
     <title>Add Product</title>
 </head>
 <body>
-
-<header th:replace="fragments/header :: navbar"></header>
+<span th:text="${cquantity}" style="color:red"></span>
+<header th:replace="fragments/headerCustomer :: navbar"></header>
 
 <!--<h2>Welcome, <span th:text="${user}"></span></h2>-->
 <span th:text="${msg}"></span>
 <table>
     <tr>
         <th>productName</th>
-        <th>productCategory</th>
+<!--        <th>productCategory</th>-->
         <th>productQuantity</th>
         <th>productPrice</th>
         <th>productDescription</th>
         <th>productImage</th>
         <th>Place Order</th>
     </tr>
+    <tr th:each="prodC:${ProductListByCat}">
+        <td th:text="${prodC.productName}"></td>
+<!--        <td th:text="${prodC.productCategory}"></td>-->
+        <td th:text="${prodC.productQuantity}"></td>
+        <td th:text="${prodC.productPrice}"></td>
+        <td th:text="${prodC.productDescription}"></td>
+        <td><img th:src="${prodC.productImage}" width="50px" height="50px"/></td>
+        <td><!--<a th:href="@{/placeOrder/{pid} (pid=${prodC.productId}) }">
+            Place Order</a>-->
+        <form th:action="@{/placeOrder}" method="post">
+            <input type="hidden" th:value="${prodC.productId}" name="productID"></input>
+            <input type="submit" value="Place Order"></input>
+        </form>
+        </td>
+    </tr>
     <tr th:each="prod:${ProductList}">
         <td th:text="${prod.productName}"></td>
-        <td th:text="${prod.productCategory}"></td>
+        <!--        <td th:text="${prod.productCategory}"></td>-->
         <td th:text="${prod.productQuantity}"></td>
         <td th:text="${prod.productPrice}"></td>
         <td th:text="${prod.productDescription}"></td>
-        <td><img th:src="${product.productImage}" width="50px" height="50px"/></td>
+        <td><img th:src="${prod.productImage}" width="50px" height="50px"/></td>
         <td><!--<a th:href="@{/placeOrder/{pid} (pid=${prod.productId}) }">
             Place Order</a>-->
-        <form th:action="@{/placeOrder}" method="post">
-            <input type="hidden" th:value="${prod.productId}" name="productID"></input>
-            <input type="submit" value="Place Order"></input>
-        </form>
+            <form th:action="@{/placeOrder}" method="post">
+                <input type="hidden" th:value="${prod.productId}" name="productID"></input>
+                <input type="submit" value="Place Order"></input>
+            </form>
         </td>
     </tr>
 </table>

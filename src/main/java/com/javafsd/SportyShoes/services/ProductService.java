@@ -24,4 +24,7 @@ public class ProductService {
     public List<Product> findAllProducts() {
         return productRepository.findAll();
     }
+    public List<Product> findAllProductsByCategory(ProductCategory productCategory) {
+        return productRepository.findAllByProductCategory(productCategory);
+    }
 }

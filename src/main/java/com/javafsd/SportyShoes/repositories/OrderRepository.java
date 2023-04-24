@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Long> {
     public List<Order> findAllByCustomer(Customer customer);
+    public void deleteAllByCustomer(Customer customer);
 }
