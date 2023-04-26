@@ -5,7 +5,9 @@ import com.javafsd.SportyShoes.entities.Customer;
 import com.javafsd.SportyShoes.entities.ProductCategory;
 import com.javafsd.SportyShoes.services.CustomerLoginService;
 import com.javafsd.SportyShoes.services.ProductCategoryService;
+import com.javafsd.SportyShoes.utilities.HelperClass;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,11 +24,11 @@ public class CustomerLoginController {
     CustomerLoginService customerLoginService;
     @Autowired
     ProductCategoryService productCategoryService;
-/*    @GetMapping("/")
-    public String landingpage(SignUpDto signUpDto, Model model){
-        model.addAttribute("SignUp", signUpDto);
-        return "signUp";
-    }*/
+    @Autowired
+    HelperClass helperClass;
+    @Value("${sporty.page.returnv}")
+    private String returnv;
+
     @GetMapping("/")
     public String landingPage(){
         return "SignIn";
@@ -78,21 +80,5 @@ public class CustomerLoginController {
     public String signOut(HttpSession session){
         session.invalidate();
         return "signIn";
-    }
-    @GetMapping("/viewUsers")
-    public String listCustomers(Model model){
-        List<Customer> allUsers=customerLoginService.displayAllCustomers();
-        model.addAttribute("allUsers",allUsers);
-        return "viewUsers";
-    }
-    @PostMapping("/searchCustomer")
-    public String searchCustomer(@ModelAttribute("email") String email, Model model){
-        Optional<Customer> found= Optional.ofNullable(customerLoginService.findCustomerByEmail(email));
-        if(found.isPresent()){
-            System.out.println("customer found");
-            Customer customerfound=found.get();
-            model.addAttribute("found",customerfound);
-        }
-        return "viewUsers";
     }
 }

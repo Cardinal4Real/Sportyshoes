@@ -2,27 +2,28 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link th:href="@{css/login.css}" rel="stylesheet"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link rel="stylesheet" th:href="@{css/login.css}"/>
     <title>SignIn</title>
 </head>
 <body>
+<header th:replace="fragments/header :: navbar"></header>
 <div class="adminDiv"><a th:href="@{/admin/signIn}">Administrator</a></div>
-<h2 th:text="${msg}" style="color:red"></h2>
+<h2 style="color:red" th:text="${msg}"></h2>
 
-<form th:action="@{/proc/changePwd}" th:object="${SignInDto}" method="post" style="border:1px solid #ccc">
+<form method="post" style="border:1px solid #ccc" th:action="@{/proc/changePwd}" th:object="${SignInDto}">
     <div class="container">
         <h1>Change Password</h1>
         <hr>
         <label><b>Email</b></label>
-        <input type="text" th:field="*{email}" th:value="${userEmail}" readonly="true" required>
+        <input readonly="true" required th:field="*{email}" th:value="${SignInDto.email}" type="text">
 
         <label><b>Password</b></label>
-        <input type="password" th:field="*{password}" placeholder="Enter new Password" required>
+        <input placeholder="Enter new Password" required th:field="*{password}" type="password">
 
         <div class="clearfix">
-            <button type="submit" class="signupbtn">Update Password</button>
+            <button class="signupbtn" type="submit">Update Password</button>
         </div>
     </div>
 </form>

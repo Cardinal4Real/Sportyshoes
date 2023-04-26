@@ -2,31 +2,43 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link th:href="@{css/login.css}" rel="stylesheet"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link rel="stylesheet" th:href="@{css/login.css}"/>
 
-    <link rel="stylesheet" href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" />
+    <link href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
     <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
     <script src="/webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-
+    <script>
+        $(document).ready(function() {
+    $('#datePicker').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true
+    });
+});
+    </script>
     <title>Add Product</title>
 </head>
 <body>
-<span th:text="${cquantity}" style="color:red"></span>
+<span style="color:red" th:text="${msg}"></span>
 <header th:replace="fragments/header :: navbar"></header>
 
-<h1>Purchase Report</h1>
-<p>Filtered by category: <b th:text="${categoryName}"></b></p>
-<p>Between dates: <b th:text="${startDate}"></b> and <b th:text="${endDate}"></b></p>
-
-<form action="#" th:action="@{/submit}" method="post">
+<form action="#" method="post" th:action="@{/pendingOrdersDates}">
     <div class="form-group">
-        <label for="datePicker">Select a date:</label>
+        <label for="datePicker">Select begin date:</label>
         <div class="input-group date">
-            <input type="text" class="form-control" id="datePicker" name="selectedDate" th:value="${selectedDate}" />
+            <input class="form-control" id="datePicker" name="selectedDate" required th:value="${selectedDate}" type="text"/>
+            <div class="input-group-append">
+                <span class="input-group-text">
+                    <i class="fa fa-calendar"></i>
+                </span>
+            </div>
+        </div>
+        <label for="datePicker">Select end date:</label>
+        <div class="input-group date">
+            <input class="form-control" id="datePicker2" name="selectedDateEnd" required th:value="${selectedDateEnd}" type="text"/>
             <div class="input-group-append">
                 <span class="input-group-text">
                     <i class="fa fa-calendar"></i>
@@ -34,7 +46,15 @@
             </div>
         </div>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <span>Filter by Product Category</span>
+    <label><b>Category</b></label>
+    <select th:name="categoryoption">
+        <option th:value="None">All Categories</option>
+        <option th:each="cat:${ProductCategory}" th:value="${cat.categoryName}">
+            <span th:text="${cat.categoryName}"></span>
+        </option>
+    </select><br/>
+    <button class="btn btn-primary" type="submit">Submit</button>
 </form>
 <p><a th:href="@{/pendingOrders}">Orders Pending</a></p>
 <table>
@@ -86,6 +106,5 @@
     </tr>
     </tbody>
 </table>
-
 </body>
 </html>

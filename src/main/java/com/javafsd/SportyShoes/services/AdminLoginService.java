@@ -2,6 +2,7 @@ package com.javafsd.SportyShoes.services;
 
 import com.javafsd.SportyShoes.dtos.SignInDto;
 import com.javafsd.SportyShoes.entities.AdminLogin;
+import com.javafsd.SportyShoes.entities.Customer;
 import com.javafsd.SportyShoes.repositories.AdminLoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,12 +14,6 @@ public class AdminLoginService {
     AdminLoginRepository adminLoginRepository;
 
     public AdminLogin signIn(SignInDto signInDto) {
-/*        //Optional<AdminLogin> adminFound= Optional.ofNullable(adminLoginRepository.findOneByEmailAndPassword(signInDto.getEmail(), signInDto.getPassword()));
-        if(adminFound.isPresent()){
-            return "adminHome";
-        }else{
-            return "";
-        }*/
         return adminLoginRepository.findOneByEmailAndPassword(signInDto.getEmail(), signInDto.getPassword());
 
     }
@@ -28,5 +23,10 @@ public class AdminLoginService {
         adminLogin.setPassword(signInDto.getPassword());
         adminLoginRepository.save(adminLogin);
         return "Password changed successfully";
+    }
+    public AdminLogin findAdmin(AdminLogin adminLogin) {
+        System.out.println(adminLogin.getEmail());
+        AdminLogin dynamicAdmin=(adminLogin !=null)?adminLoginRepository.findOneByEmail(adminLogin.getEmail()):null;
+        return dynamicAdmin;
     }
 }

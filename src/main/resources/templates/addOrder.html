@@ -2,9 +2,9 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link th:href="@{css/login.css}" rel="stylesheet"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link rel="stylesheet" th:href="@{css/login.css}"/>
     <title>Add Order</title>
 </head>
 <body>
@@ -12,19 +12,19 @@
 <header th:replace="fragments/header :: navbar"></header>
 
 <h2>Welcome, <span th:text="${user}"></span></h2>
-<form th:action="@{/proc/addOrder}"  th:object="${Order}" method="post" style="border:1px solid #ccc">
+<form method="post"  style="border:1px solid #ccc" th:action="@{/proc/addOrder}" th:object="${Order}">
     <div class="container">
         <h1>Add to cart</h1>
         <hr>
         <!--<label><b>Name</b></label>-->
-        <input type="hidden" th:field="*{product}">
-        <img th:src="${Order.product.productImage}" width="50px" height="50px"/>
-        <input type="hidden" th:field="*{customer}" >
+        <input th:field="*{product}" type="hidden">
+        <img height="50px" th:src="${Order.product.productImage}" width="50px"/>
+        <input th:field="*{customer}" type="hidden" >
     <label><b>Quantity</b></label>
-        <input type="text" th:field="*{orderQuantity}" placeholder="Enter order quantity" required>
+        <input placeholder="Enter order quantity" required th:field="*{orderQuantity}" type="text">
 
         <label><b>Price</b></label>
-        <input type="text" th:field="*{orderPrice}" th:readonly="true" placeholder="Enter price of product" required>
+        <input placeholder="Enter price of product" required th:field="*{orderPrice}" th:readonly="true" type="text">
 
 <!--
         <label><b>Total</b></label>
@@ -32,10 +32,10 @@
 -->
 
          <div class="clearfix">
-            <button type="submit" class="signupbtn">Add to Cart</button>
+            <button class="signupbtn" type="submit">Add to Cart</button>
         </div>
     </div>
 </form>
-<footer th:replace="fragments/header :: sessioninfo"></footer>
+<!--<footer th:replace="fragments/header :: sessioninfo"></footer>-->
 </body>
 </html>
