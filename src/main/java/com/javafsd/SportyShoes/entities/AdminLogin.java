@@ -17,14 +17,4 @@ public class AdminLogin {
     private Long id;
     private String email;
     private String password;
-
-
-/*    public AdminSignInEntity(SignUpDto signUpDto) {
-        this.firstName= signUpDto.getFirstName();
-        this.lastName= signUpDto.getLastName();
-        this.phoneNumber= signUpDto.getPhoneNumber();
-        this.address= signUpDto.getAddress();
-        this.email=signUpDto.getEmail();
-        this.password=signUpDto.getPassword();
-    }*/
 }

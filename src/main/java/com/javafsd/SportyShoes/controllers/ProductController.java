@@ -1,8 +1,8 @@
 package com.javafsd.SportyShoes.controllers;
 
+import com.javafsd.SportyShoes.entities.Customer;
 import com.javafsd.SportyShoes.entities.Product;
 import com.javafsd.SportyShoes.entities.ProductCategory;
-import com.javafsd.SportyShoes.services.CustomerLoginService;
 import com.javafsd.SportyShoes.services.ProductCategoryService;
 import com.javafsd.SportyShoes.services.ProductService;
 import com.javafsd.SportyShoes.utilities.HelperClass;
@@ -36,34 +36,36 @@ public class ProductController {
         String foundAdmin = helperClass.adminAuxilliary(session);
         if (!foundAdmin.isEmpty()) {
             List<ProductCategory> productCategoryList = productCategoryService.findAllProductCategory();
-            System.out.println(productCategoryList);
             model.addAttribute("Product", product);
             model.addAttribute("user", "");
             model.addAttribute("ProductCategory", productCategoryList);
+            model.addAttribute("addProduct", "active");
             returnv = "addProduct";
         }
         return returnv;
     }
 
     @PostMapping("/proc/addProduct")
-    public String storeProduct(@ModelAttribute Product product, Model model) {
+    public String storeProduct(@ModelAttribute Product product, Model model,HttpSession session) {
         String addProductResult = productService.addProduct(product);
         model.addAttribute("msg", addProductResult);
-        model.addAttribute("Product", product);
-        return "addProduct";
+        return addProduct(product,model,session);
     }
 
     @GetMapping("/viewProduct")
-    public String viewProduct(Product product, HttpSession session, Model model) {
+    public String viewProduct(HttpSession session, Model model) {
         String foundCustomer = helperClass.customerAuxilliary(session);
         String returnCV = "signIn";
         if (!foundCustomer.isEmpty()) {
+            Customer customer=(Customer) session.getAttribute("sessionuser");
             Map<String, String> mAttributes = new HashMap<>();
             String cartQuantity = helperClass.cartHelper(session);
             List<Product> productList = productService.findAllProducts();
             String msg = productList.size() > 0 ? "" : "No products to display";
             mAttributes.put("cquantity", cartQuantity);
             mAttributes.put("msg", msg);
+            mAttributes.put("user",customer.getEmail());
+            mAttributes.put("prodCatalog","active");
             modelHelper(model, mAttributes);
             model.addAttribute("ProductList", productList);
             returnCV = "viewProducts";
@@ -76,16 +78,12 @@ public class ProductController {
         String foundCustomer = helperClass.customerAuxilliary(session);
         String returnCV = "signIn";
         if (!foundCustomer.isEmpty()) {
-            String cartQuantity = helperClass.cartHelper(session);
             ProductCategory productCategory = productCategoryService.findProductCategory(categoryId);
             List<Product> productListByCategory = productService.findAllProductsByCategory(productCategory);
-            List<Product> productList = productService.findAllProducts();
-            String msg = productList.size() > 0 ? "" : "No products to display";
-            model.addAttribute("msg", msg);
             model.addAttribute("ProductListByCat", productListByCategory);
-            model.addAttribute("ProductList", productList);
-            model.addAttribute("cquantity", cartQuantity);
-            returnCV = "viewProducts";
+            model.addAttribute("ProductListByCat", productListByCategory);
+            model.addAttribute("prodCatalog","active");
+            returnCV = viewProduct(session, model);
         }
         return returnCV;
     }

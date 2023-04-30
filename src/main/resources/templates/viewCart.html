@@ -2,16 +2,16 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link th:href="@{css/login.css}" rel="stylesheet"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+<!--    <link th:href="@{css/category.css}" rel="stylesheet"/>-->
+    <header th:replace="fragments/css-fragment :: css"></header>
     <title>View Cart</title>
 </head>
 <body>
-<span th:text="${cquantity}" style="color:red"></span>
-<header th:replace="fragments/headerCustomer :: navbar"></header>
+<!--<span style="color:red" th:text="${cquantity}"></span>-->
+<header th:replace="fragments/headerTInner :: navbar"></header>
 
-<h2>Welcome, <span th:text="${user}"></span></h2>
 <span th:text="${msg}"></span>
 <table>
     <tr>
@@ -23,7 +23,7 @@
     </tr>
     <tr th:each="order:${orderList}">
         <td th:text="${order.product.productName}"></td>
-        <td><img th:src="${order.product.productImage}" width="50px" height="50px"/></td>
+        <td><img height="50px" th:src="${order.product.productImage}" width="50px"/></td>
         <td th:text="${order.orderQuantity}"></td>
         <td th:text="${order.orderPrice}"></td>
         <td th:text="${order.orderTotal}"></td>
@@ -35,8 +35,8 @@
 </table>
 <h2>Total Order: <span th:text="${orderTotal}"></span></h2>
 <span>
-<form th:action="@{/checkoutOrder}" method="post">
-    <input type="hidden" th:value="${orderTotal}" name="orderTotal" ></input>
+<form method="post" th:action="@{/checkoutOrder}">
+    <input name="orderTotal" th:value="${orderTotal}" type="hidden" ></input>
     <input type="submit" value="Checkout"></input>
 </form>
 </span>

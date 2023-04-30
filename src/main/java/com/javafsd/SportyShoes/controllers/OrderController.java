@@ -37,22 +37,23 @@ public class OrderController {
     @PostMapping("/placeOrder")
     public String placeOrder(@ModelAttribute("productID") String productid, HttpSession session, Model model) {
         String foundCustomer = helperClass.customerAuxilliary(session);
-        System.out.println(foundCustomer +"<<<<Found Cust");
         if (!foundCustomer.isEmpty()) {
             Optional<Product> fProduct = productService.findOneProduct(productid);
-            System.out.println("here now "+fProduct);
             if (fProduct.isPresent() && session != null) {
-                System.out.println("Executing final loop");
+                Customer sessioncustomer = (Customer) session.getAttribute("sessionuser");
+                String cartQuantity = helperClass.cartHelper(session);
                 Product product = fProduct.get();
                 Order order = new Order();
-                order.setCustomer((Customer) session.getAttribute("sessionuser"));
+                order.setCustomer(sessioncustomer);
                 order.setProduct(product);
                 order.setOrderPrice(product.getProductPrice());
                 order.setOrderQuantity(1);
                 model.addAttribute("Order", order);
+                model.addAttribute("user", sessioncustomer.getEmail());
+                model.addAttribute("prodCatalog", "active");
+                model.addAttribute("cquantity", cartQuantity);
                 returnCV = "addOrder";
             } else {
-                //go sign in
                 model.addAttribute("error", "Please sign in");
             }
         }
@@ -63,9 +64,13 @@ public class OrderController {
     public String storeProduct(@ModelAttribute Order order, HttpSession session, Model model) {
         String addOrderResult = orderService.calcOrderNstore(order);
         String cartQuantity = helperClass.cartHelper(session);
+        Customer customer=(Customer)session.getAttribute("sessionuser");
         List<Product> productList = productService.findAllProducts();
+
         String msg = addOrderResult.isEmpty() ? "" : "Order added to cart";
         model.addAttribute("msg", msg);
+        model.addAttribute("user", customer.getEmail());
+        model.addAttribute("prodCatalog", "active");
         model.addAttribute("ProductList", productList);
         model.addAttribute("cquantity", cartQuantity);
         return "viewProducts";
@@ -84,6 +89,7 @@ public class OrderController {
             model.addAttribute("orderList", customer.getListOfOrders());
             model.addAttribute("orderTotal", orderTotal);
             model.addAttribute("cquantity", cartQuantity);
+            model.addAttribute("viewCart", "active");
             returnCV="viewCart";
         }
         return returnCV;
@@ -125,10 +131,10 @@ public class OrderController {
     public String processOrders(HttpSession session, Model model) {
         String foundAdmin = helperClass.adminAuxilliary(session);
         if (!foundAdmin.isEmpty()) {
-            //AdminLogin admin=(AdminLogin)session.getAttribute("adminsession");
             List<ProductCategory> productCategoryList = productCategoryService.findAllProductCategory();
             System.out.println(productCategoryList);
             model.addAttribute("ProductCategory", productCategoryList);
+            model.addAttribute("viewReports","active");
             returnv = "processOrders";
         }
         return returnv;
@@ -138,9 +144,7 @@ public class OrderController {
     public String pendingOrders(HttpSession session, Model model) {
         String foundAdmin = helperClass.adminAuxilliary(session);
         if (!foundAdmin.isEmpty()) {
-            System.out.println("Pending Orders invoked");
             List<Order_CheckedOut> pendingOrders = orderCheckedOutService.findPendingOrders("Processing");
-            System.out.println(pendingOrders);
             model.addAttribute("pendingOrderList", pendingOrders);
             returnv = processOrders(session, model);
         }
@@ -159,7 +163,6 @@ public class OrderController {
                 LocalDateTime eDate = LocalDateTime.parse(dateEnd + "T23:59:59");
                 List<Order_CheckedOut> pendingOrders = orderCheckedOutService.findAllByTimestampBetween(bDate, eDate);
                 if (pendingOrders.size() > 0) {
-                    System.out.println("checking size of pendingOrders");
                     List<Order_CheckedOut> pendingOrdersf = (!catOption.equals("None")) ? pendingOrders.stream()
                             .filter(orders -> orders.getProduct().getProductCategory().getCategoryName()
                                     .equals(catOption)).collect(Collectors.toList()) : pendingOrders;

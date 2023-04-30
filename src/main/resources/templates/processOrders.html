@@ -4,60 +4,48 @@
     <meta charset="UTF-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <link rel="stylesheet" th:href="@{css/login.css}"/>
+    <header th:replace="fragments/css-fragment-admin :: css"></header>
 
-    <link href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
-    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/4.6.0/js/bootstrap.min.js"></script>
-    <script src="/webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script>
-        $(document).ready(function() {
-    $('#datePicker').datepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true
-    });
-});
-    </script>
-    <title>Add Product</title>
+    <title>View Reports</title>
 </head>
 <body>
 <span style="color:red" th:text="${msg}"></span>
-<header th:replace="fragments/header :: navbar"></header>
-
-<form action="#" method="post" th:action="@{/pendingOrdersDates}">
-    <div class="form-group">
-        <label for="datePicker">Select begin date:</label>
-        <div class="input-group date">
-            <input class="form-control" id="datePicker" name="selectedDate" required th:value="${selectedDate}" type="text"/>
-            <div class="input-group-append">
-                <span class="input-group-text">
-                    <i class="fa fa-calendar"></i>
-                </span>
+<header th:replace="fragments/headerAdminInner :: navbar"></header>
+<div class="container-fluid">
+    <div class="row">
+        <form method="post" th:action="@{/pendingOrdersDates}">
+            <div style="display: flex; align-items: center;">
+                <div style="display: flex; flex-direction: column; margin-right: 10px;">
+                    <label><b>Start date:</b></label>
+                    <input name="selectedDate" required th:value="${selectedDate}" type="date" style="height: 30px;"/>
+                </div>
+                <div style="display: flex; flex-direction: column; margin-right: 10px;">
+                    <label><b>End date:</b></label>
+                    <input name="selectedDateEnd" required th:value="${selectedDateEnd}" type="date" style="height: 30px;"/>
+                </div>
+                <div style="display: flex; flex-direction: column; margin-right: 10px;">
+                    <label><b>Product Category</b></label>
+                    <div style="display: flex; align-items: center;">
+                        <select th:name="categoryoption" style="height: 30px;">
+                            <option th:value="None">All Categories</option>
+                            <option th:each="cat:${ProductCategory}" th:value="${cat.categoryName}">
+                                <span th:text="${cat.categoryName}"></span>
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-left: 10px;margin-top: 30px;">
+                    <button class="btn btn-primary" type="submit" >Submit</button>
+                </div>
             </div>
-        </div>
-        <label for="datePicker">Select end date:</label>
-        <div class="input-group date">
-            <input class="form-control" id="datePicker2" name="selectedDateEnd" required th:value="${selectedDateEnd}" type="text"/>
-            <div class="input-group-append">
-                <span class="input-group-text">
-                    <i class="fa fa-calendar"></i>
-                </span>
-            </div>
-        </div>
+        </form>
     </div>
-    <span>Filter by Product Category</span>
-    <label><b>Category</b></label>
-    <select th:name="categoryoption">
-        <option th:value="None">All Categories</option>
-        <option th:each="cat:${ProductCategory}" th:value="${cat.categoryName}">
-            <span th:text="${cat.categoryName}"></span>
-        </option>
-    </select><br/>
-    <button class="btn btn-primary" type="submit">Submit</button>
-</form>
-<p><a th:href="@{/pendingOrders}">Orders Pending</a></p>
-<table>
+
+
+</div>
+
+<div th:if="${not #lists.isEmpty(pendingOrderList)}">
+<table class="table table-stripped">
     <thead>
     <tr>
         <th>Firstname</th>
@@ -76,35 +64,10 @@
         <td th:text="${orders.orderPrice}"></td>
         <td th:text="${orders.orderQuantity}"></td>
         <td th:text="${orders.orderTotal}"></td>
-<!--        <td th:text="${result[4]}"></td>
-        <td th:text="${result[5]}"></td>
-        <td th:text="${result[6]}"></td>-->
     </tr>
     </tbody>
 </table>
-<table>
-    <thead>
-    <tr>
-        <th>Date</th>
-        <th>Product</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Quantity</th>
-        <th>Price</th>
-        <th>Total</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="result : ${results}">
-        <td th:text="${#dates.format(result[0], 'dd/MM/yyyy HH:mm:ss')}"></td>
-        <td th:text="${result[1]}"></td>
-        <td th:text="${result[2]}"></td>
-        <td th:text="${result[3]}"></td>
-        <td th:text="${result[4]}"></td>
-        <td th:text="${result[5]}"></td>
-        <td th:text="${result[6]}"></td>
-    </tr>
-    </tbody>
-</table>
+</div>
+</div>
 </body>
 </html>

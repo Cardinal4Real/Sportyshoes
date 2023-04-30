@@ -1,0 +1,28 @@
+    .product-categories {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .product-category {
+        width: 32%;
+        margin-bottom: 20px;
+    }
+    .category-name {
+        display: block;
+        margin-top: 10px;
+    }
+      .category-image-container {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .category-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }

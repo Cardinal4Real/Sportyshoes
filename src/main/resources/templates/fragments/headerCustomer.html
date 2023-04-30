@@ -1,9 +1,0 @@
-<div th:fragment="navbar" xmlns:th="http://www.w3.org/1999/xhtml">
-    <span><a th:href="@{/viewProduct}">View Products</a></span>
-    <span><a th:href="@{/viewCart}">View Cart</a></span>
-    <span><a th:href="@{/signOut}">Sign Out</a></span>
-</div>
-<div th:fragment="sessioninfo" xmlns:th="http://www.w3.org/1999/xhtml">
-    <h1>From session fragment <span th:text="${session.sessionuser}"></span></h1>
-    <h1>From session fragment <span th:text="${session.sessionuser.email}"></span></h1>
-</div>

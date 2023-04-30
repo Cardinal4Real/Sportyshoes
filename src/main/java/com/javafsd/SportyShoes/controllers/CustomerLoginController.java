@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class CustomerLoginController {
@@ -33,6 +32,17 @@ public class CustomerLoginController {
     public String landingPage(){
         return "SignIn";
     }
+    @GetMapping("/home")
+    public String custHome(HttpSession session, Model model){
+        String foundCustomer = helperClass.customerAuxilliary(session);
+        String returnCV = "signIn";
+        if (!foundCustomer.isEmpty()) {
+            Customer customer = (Customer) session.getAttribute("sessionuser");
+            session.setAttribute("sessionuser",customer);
+            returnCV= homeHelper(session,model,customer);
+        }
+            return returnCV;
+    }
 
     @GetMapping("/signUp")
     public String signUp(Customer customer, Model model){
@@ -44,12 +54,11 @@ public class CustomerLoginController {
         String returnv="";
         String signUpResult=customerLoginService.signUp(customer);
         if(signUpResult.equals("SignUp successful")){
-            model.addAttribute("error",signUpResult);
+            model.addAttribute("msg",signUpResult);
             returnv="signIn";
         }else {
-            model.addAttribute("signUpResult",signUpResult);
+            model.addAttribute("msg",signUpResult);
             model.addAttribute("SignUp", customer);
-            //model.addAttribute("SignUp", new SignUpDto());
             returnv="signUp";
         }
         return returnv;
@@ -62,12 +71,7 @@ public class CustomerLoginController {
             return "signIn";
         }else{
             session.setAttribute("sessionuser",customer);
-            String cartQuantity=customer.getListOfOrders().size()>0? String.valueOf(customer.getListOfOrders().size()) :"";
-            List<ProductCategory> productCategoryList=productCategoryService.findAllProductCategory();
-            model.addAttribute("user",customer.getEmail());
-            model.addAttribute("cquantity",cartQuantity);
-            model.addAttribute("productCategoryList",productCategoryList);
-            return "sportyshoeshome";
+            return homeHelper(session,model,customer);
         }
     }
     @GetMapping("/signInUser")
@@ -80,5 +84,14 @@ public class CustomerLoginController {
     public String signOut(HttpSession session){
         session.invalidate();
         return "signIn";
+    }
+    public String homeHelper(HttpSession session, Model model, Customer customer){
+        String cartQuantity=customer.getListOfOrders().size()>0? String.valueOf(customer.getListOfOrders().size()) :"0";
+        List<ProductCategory> productCategoryList=productCategoryService.findAllProductCategory();
+        model.addAttribute("user",customer.getEmail());
+        model.addAttribute("cquantity",cartQuantity);
+        model.addAttribute("prodCategories","active");
+        model.addAttribute("productCategoryList",productCategoryList);
+        return "sportyshoeshome";
     }
 }

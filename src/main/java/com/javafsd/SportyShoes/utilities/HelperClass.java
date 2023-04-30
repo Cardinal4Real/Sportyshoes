@@ -19,7 +19,7 @@ public class HelperClass {
         Optional<Customer> customerOpt=findCustomer(session);
         if(customerOpt.isPresent()){
             Customer customer=customerOpt.get();
-            return customer.getListOfOrders().size()>0? String.valueOf(customer.getListOfOrders().size()) :"";
+            return customer.getListOfOrders().size()>0? String.valueOf(customer.getListOfOrders().size()) :"0";
         }else{
             return "";
         }

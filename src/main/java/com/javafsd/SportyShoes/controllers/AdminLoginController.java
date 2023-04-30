@@ -32,17 +32,8 @@ public class AdminLoginController {
     private String returnv;
     @GetMapping("/admin/signIn")
     public String adminSignIn(){
+        //return "adminHome";
         return "adminSignIn";
-    }
-    @GetMapping("/home")
-    public String adminLandingPage(HttpSession session,Model model){
-        String foundAdmin=helperClass.adminAuxilliary(session);
-        if(!foundAdmin.isEmpty()){
-            AdminLogin admin=(AdminLogin)session.getAttribute("adminsession");
-            model.addAttribute("user",admin);
-            returnv=orderController.processOrders(session,model);
-        }
-        return returnv;
     }
 
     @PostMapping("/proc/signIn")
@@ -56,6 +47,7 @@ public class AdminLoginController {
         }else{
             System.out.println("Going to call orderController");
             model.addAttribute("user",admin);
+            model.addAttribute("viewReports","active");
             session.setAttribute("adminsession",admin);
             returnv=orderController.processOrders(session,model);
         }
@@ -70,6 +62,7 @@ public class AdminLoginController {
             signInDto.setEmail(admin.getEmail());
             signInDto.setPassword(admin.getPassword());
             model.addAttribute("SignInDto", signInDto);
+            model.addAttribute("changePassword","active");
             returnv="changePwd";
         }
         return returnv;
@@ -80,7 +73,8 @@ public class AdminLoginController {
         String resp=adminLoginService.changePwd(signInDto);
         model.addAttribute("SignInDto",new SignInDto());
         model.addAttribute("msg",resp);
-        return "changePwd";
+        model.addAttribute("changePassword","active");
+        return "adminSignIn";
     }
     @GetMapping("/viewUsers")
     public String listCustomers(Model model,HttpSession session){
@@ -88,18 +82,16 @@ public class AdminLoginController {
         if(!foundAdmin.isEmpty()) {
             List<Customer> allUsers = customerLoginService.displayAllCustomers();
             model.addAttribute("allUsers", allUsers);
+            model.addAttribute("viewUsers","active");
             returnv= "viewUsers";
         }
         return returnv;
     }
     @PostMapping("/searchCustomer")
     public String searchCustomer(@ModelAttribute("email") String email, Model model){
-        Optional<Customer> found= Optional.ofNullable(customerLoginService.findCustomerByEmail(email));
-        if(found.isPresent()){
-            System.out.println("customer found");
-            Customer customerfound=found.get();
-            model.addAttribute("found",customerfound);
-        }
+        List<Customer> found= customerLoginService.findCustomerByEmail(email);
+        model.addAttribute("allUsers",found);
+        model.addAttribute("viewUsers","active");
         return "viewUsers";
     }
 }

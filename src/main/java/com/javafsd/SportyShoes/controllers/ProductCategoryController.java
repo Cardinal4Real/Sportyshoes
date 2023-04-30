@@ -30,6 +30,7 @@ public class ProductCategoryController {
         String foundAdmin=helperClass.adminAuxilliary(session);
         if(!foundAdmin.isEmpty()) {
             model.addAttribute("ProductCategory", productCategory);
+            model.addAttribute("createCategory", "active");
             returnv= "addProductCategory";
         }
         return returnv;
@@ -39,6 +40,7 @@ public class ProductCategoryController {
         String addProductCategoryResult=productCategoryService.addProductCategory(productCategory);
         model.addAttribute("msg",addProductCategoryResult);
         model.addAttribute("ProductCategory",productCategory);
+        model.addAttribute("createCategory", "active");
         return "addProductCategory";
     }
 

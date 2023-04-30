@@ -34,8 +34,8 @@ public class CustomerLoginService {
         Customer dynamicCustomer=(customer !=null)? customerRepository.findFirstByEmail(customer.getEmail()):null;
         return dynamicCustomer;
     }
-    public Customer findCustomerByEmail(String email) {
-        return customerRepository.findFirstByEmail(email);
+    public List<Customer> findCustomerByEmail(String email) {
+        return customerRepository.findByEmailContaining(email);
     }
     public List<Customer> displayAllCustomers() {
         return customerRepository.findAll();

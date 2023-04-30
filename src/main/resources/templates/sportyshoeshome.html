@@ -1,21 +1,47 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link th:href="@{css/login.css}" rel="stylesheet"/>
-    <title>SignIn</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Categories</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="css/assets/img/favicon.png" rel="icon">
+    <link href="css/assets/img/shoes/boots.jpg" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="css/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="css/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="css/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="css/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/css/assets/css/style.css" rel="stylesheet">
+    <link href="/css/category.css" rel="stylesheet">
 </head>
 <body>
-<!--<header th:replace="fragments/headerCustomer :: navbar"></header>-->
-<span th:text="${cquantity}"></span>
-<h1>Welcome, <span th:text="${user}"></span>!</h1>
-<table>
-    <tr th:each="prodCat:${productCategoryList}">
-        <td th:text="${prodCat.categoryName}"></td>
-        <td><a th:href="@{/viewProduct/{cId}(cId=${prodCat.categoryId})}"><img th:src="${prodCat.categoryImage}" width="50px" height="50px"/></a></td>
-    </tr>
-</table>
+<header th:replace="fragments/headerTInner :: navbar"></header>
+<div class="container">
+<!--<span th:text="${cquantity}"></span>-->
+<!--<h1>Welcome, <span th:text="${user}"></span>!</h1>-->
+    <div class="product-categories">
+        <div class="product-category" th:each="prodCat, iterationStatus : ${productCategoryList}">
+            <a th:href="@{/viewProduct/{cId}(cId=${prodCat.categoryId})}">
+                <div class="category-image-container">
+                <img height="80px" th:src="${prodCat.categoryImage}" width="80px"/>
+                </div>
+                <span class="category-name" th:text="${prodCat.categoryName}"></span>
+            </a>
+        </div>
+    </div>
+</div>
 </body>
 </html>

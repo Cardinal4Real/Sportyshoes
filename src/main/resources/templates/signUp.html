@@ -2,47 +2,56 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link th:href="@{css/login.css}" rel="stylesheet"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <header th:replace="fragments/css-fragment :: css"></header>
     <title>SignUp</title>
 </head>
 <body>
-<h2 th:text="${signUpResult}" style="color:red"></h2>
+<h4 style="color:red" th:text="${msg}"></h4>
+<header th:replace="fragments/headerT :: navbar"></header>
 
-<form th:action="@{/signUp}" th:object="${SignUp}" method="post" style="border:1px solid #ccc">
-    <div class="container">
-        <h1>Sign Up</h1>
-        <hr>
-        <label><b>FirstName</b></label>
-        <input type="text" th:field="*{firstName}" placeholder="Enter first name" name="fname" required>
+<div class="container-fluid">
 
-        <label><b>LastName</b></label>
-        <input type="text" th:field="*{lastName}" placeholder="Enter last name" name="lname" required>
-
-        <label><b>PhoneNumber</b></label>
-        <input type="text" th:field="*{phoneNumber}" placeholder="Enter phone number" name="phonenumber" required>
-
-        <label><b>Address</b></label>
-        <input type="text" th:field="*{address}"placeholder="Enter address" name="address" required>
-
-        <label><b>Email</b></label>
-        <input type="text" th:field="*{email}" placeholder="Enter email" name="email" required>
-
-        <label><b>Password</b></label>
-        <input type="password" th:field="*{password}" placeholder="Enter Password" name="password" required>
-
-        <label>
-            <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
-        </label>
-
-        <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
-
-        <div class="clearfix">
-            <a th:href="@{/signInUser}" class="cancelbtn">An existing user? Login</a>
-            <button type="submit" class="signupbtn">Sign Up</button>
-        </div>
+    <div class="row">
+        <div class="box">Sign Up</div>
     </div>
-</form>
+    <div class="row justify-content-center">
+        <form method="post" style="border:1px solid #ccc" th:action="@{/signUp}" th:object="${SignUp}">
+            <div class="form-group has-error">
+                <!--label><b>FirstName</b></label>-->
+                <input name="fname" placeholder="Enter first name" required th:field="*{firstName}" type="text">
+            </div>
+            <div class="form-group has-error">
+                <!--<label><b>LastName</b></label>-->
+                <input name="lname" placeholder="Enter last name" required th:field="*{lastName}" type="text">
+            </div>
+            <div class="form-group has-error">
+                <!--<label><b>PhoneNumber</b></label>-->
+                <input name="phonenumber" placeholder="Enter phone number" required th:field="*{phoneNumber}"
+                       type="text">
+            </div>
+            <div class="form-group has-error">
+                <!--<label><b>Address</b></label>-->
+                <input name="address" placeholder="Enter address" required th:field="*{address}" type="text">
+            </div>
+            <div class="form-group has-error">
+                <!--<label><b>Email</b></label>-->
+                <input name="email" placeholder="Enter email" required th:field="*{email}" type="text">
+            </div>
+            <div class="form-group has-error">
+                <!--<label><b>Password</b></label>-->
+                <input name="password" placeholder="Enter Password" required th:field="*{password}" type="password">
+            </div>
+
+            <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+
+            <a class="cancelbtn" th:href="@{/signInUser}">An existing user? Login</a><br/>
+            <div class="form-group has-error">
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Sign Up</button>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>

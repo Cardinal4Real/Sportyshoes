@@ -2,47 +2,79 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link th:href="@{css/login.css}" rel="stylesheet"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <header th:replace="fragments/css-fragment-admin :: css"></header>
     <title>Add Product</title>
 </head>
 <body>
 
-<header th:replace="fragments/header :: navbar"></header>
+<header th:replace="fragments/headerAdminInner :: navbar"></header>
 
-<h2>Welcome, <span th:text="${user}"></span></h2>
-<span th:text="${msg}"></span>
-<form th:action="@{/proc/addProduct}" th:object="${Product}" method="post" style="border:1px solid #ccc">
-    <div class="container">
-        <h1>Add Product</h1>
-        <hr>
-        <label><b>Name</b></label>
-        <input type="text" th:field="*{productName}" placeholder="Enter name of product" name="pname" required>
+<h5 style="color:red" th:text="${msg}"></h5>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="box">Add Product</div>
+    </div>
+    <div class="row justify-content-center">
+        <form method="post" style="border:1px solid #ccc" th:action="@{/proc/addProduct}" th:object="${Product}">
+            <div class="form-group has-error">
+                <input class="form-control" name="pname" placeholder="Enter name of product" required th:field="*{productName}" type="text">
+            </div>
+            <div class="form-group">
+                <select th:field="*{productCategory}">
+                    <option value="">--Select Category--</option>
+                    <option th:each="cat:${ProductCategory}" th:value="${cat.categoryId}">
+                        <span th:text="${cat.categoryName}"></span>
+                    </option>
+                </select>
+            </div>
+            <div class="form-group has-error">
+                Stock Quantity:<input class="form-control" name="pquantity" placeholder="Enter quantity in stock" required th:field="*{productQuantity}" type="text">
+            </div>
+            <div class="form-group has-error">
+                Unit Price:<input class="form-control" name="pprice" placeholder="Enter price of product"required th:field="*{productPrice}" type="text">
+            </div>
+            <div class="form-group has-error">
+                <input class="form-control" placeholder="Image URL" required th:field="*{productImage}" type="text">
+            </div>
+            <div class="form-group has-error">
+                <input class="form-control" placeholder="Product Description"required th:field="*{productDescription}" type="text">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Add Product</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--        <label><b>Name</b></label>
+        <input name="pname" placeholder="Enter name of product" required th:field="*{productName}" type="text">
 
         <label><b>Category</b></label>
             <select th:field="*{productCategory}">
-                <option value="">--Select Category--</option>
+                <option value="">&#45;&#45;Select Category&#45;&#45;</option>
                 <option th:each="cat:${ProductCategory}" th:value="${cat.categoryId}">
                     <span th:text="${cat.categoryName}"></span>
                 </option>
             </select><br/>
     <label><b>Quantity</b></label>
-        <input type="text" th:field="*{productQuantity}" placeholder="Enter quantity in stock" name="pquantity" required>
+        <input name="pquantity" placeholder="Enter quantity in stock" required th:field="*{productQuantity}" type="text">
 
         <label><b>Price</b></label>
-        <input type="text" th:field="*{productPrice}"placeholder="Enter price of product" name="pprice" required>
+        <input name="pprice" placeholder="Enter price of product"required th:field="*{productPrice}" type="text">
 
         <label><b>Image</b></label>
-        <input type="text" th:field="*{productImage}" placeholder="Enter link to image here" name="pimage" required>
+        <input name="pimage" placeholder="Enter link to image here" required th:field="*{productImage}" type="text">
 
         <label><b>Description</b></label>
-        <input type="text" th:field="*{productDescription}"placeholder="Enter description of product" name="pdescription" required>
+        <input name="pdescription" placeholder="Enter description of product"required th:field="*{productDescription}" type="text">
 
         <div class="clearfix">
-            <button type="submit" class="signupbtn">Add Product</button>
+            <button class="signupbtn" type="submit">Add Product</button>
         </div>
     </div>
-</form>
+</form>-->
 </body>
 </html>
