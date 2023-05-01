@@ -67,7 +67,7 @@ public class CustomerLoginController {
     public String signIn(@ModelAttribute SignInDto signInDto, Model model, HttpSession session){
         Customer customer=customerLoginService.signIn(signInDto);
         if(customer==null){
-            model.addAttribute("error","E-mail or password invalid");
+            model.addAttribute("msg","E-mail or password invalid");
             return "signIn";
         }else{
             session.setAttribute("sessionuser",customer);

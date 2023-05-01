@@ -109,7 +109,7 @@ public class OrderController {
 
     @PostMapping("/checkoutOrder")
     public String checkOutOrder(@RequestParam("orderTotal") double total, HttpSession session, Model model) {
-        String msg="Payment received...Thanks for shopping with us";
+        String msg="Consider adding items to your cart!";
         Optional<Customer> customerOpt = helperClass.findCustomer(session);
         if (customerOpt.isPresent()) {
             Customer customer = customerOpt.get();
@@ -132,6 +132,7 @@ public class OrderController {
                         listOfCustomerOrder.stream().map(Order -> new Order_CheckedOut(Order)).collect(Collectors.toList());
                 orderCheckedOutService.saveAllOrders(checkedOutList);
                 orderService.deleteOrderList(listOfCustomerOrder);
+                msg="Payment received...Thanks for shopping with us";
                 }else{
                     String orderNames = "";
                     for(Order a : orderQtyCheck) {
@@ -141,14 +142,13 @@ public class OrderController {
                             orderNames += ", " + a.getProduct().getProductName();
                         }
                     }
-                    msg="Cannot fulfill order. Fewer items in stock. Kindly review"+ orderNames +"items in your shopping bag";
+                    msg="Cannot fulfill order. Fewer items in stock. Kindly review "+ orderNames +" item(s) in your shopping bag";
                 }
             }
-            System.out.printf("Total is %s", total);
-            System.out.println(listOfCustomerOrder);
-            System.out.println(listOfCustomerOrder.size());
-            System.out.println(customer);
+            String cartQuantity = helperClass.cartHelper(session);
             model.addAttribute("msg", msg);
+            model.addAttribute("user", customer.getEmail());
+            model.addAttribute("cquantity", cartQuantity);
         }
         return "checkOutConfirmation";
     }

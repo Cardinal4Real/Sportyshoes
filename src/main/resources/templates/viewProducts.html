@@ -6,7 +6,7 @@
 
     <meta content="" name="description">
     <meta content="" name="keywords">
-    <header th:replace="fragments/css-fragment-admin :: css"></header>
+    <header th:replace="fragments/css-fragment :: css"></header>
     <title>View Products</title>
 </head>
 <body>
@@ -46,7 +46,7 @@
         <td th:text="${prod.productQuantity}"></td>
         <td th:text="${prod.productPrice}"></td>
         <td th:text="${prod.productDescription}"></td>
-        <td><img height="50px" th:src="${prod.productImage}" width="50px"/></td>
+        <td><img height="50px" th:src="${prod.productImage}" width="80px"/></td>
         <td><!--<a th:href="@{/placeOrder/{pid} (pid=${prod.productId}) }">
             Place Order</a>-->
             <form method="post" th:action="@{/placeOrder}">
