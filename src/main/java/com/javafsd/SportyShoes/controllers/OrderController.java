@@ -52,6 +52,7 @@ public class OrderController {
                 model.addAttribute("user", sessioncustomer.getEmail());
                 model.addAttribute("prodCatalog", "active");
                 model.addAttribute("cquantity", cartQuantity);
+                model.addAttribute("pquantity", product.getProductQuantity());
                 returnCV = "addOrder";
             } else {
                 model.addAttribute("error", "Please sign in");
@@ -108,21 +109,46 @@ public class OrderController {
 
     @PostMapping("/checkoutOrder")
     public String checkOutOrder(@RequestParam("orderTotal") double total, HttpSession session, Model model) {
+        String msg="Payment received...Thanks for shopping with us";
         Optional<Customer> customerOpt = helperClass.findCustomer(session);
         if (customerOpt.isPresent()) {
             Customer customer = customerOpt.get();
             List<Order> listOfCustomerOrder = orderService.findCustomerOrder(customer);
             if (listOfCustomerOrder.size() > 0) {
-                List<Order_CheckedOut> checkedOutList =
+                List<Order> orderQtyCheck=
+                listOfCustomerOrder.stream().filter(order->order.getOrderQuantity()>
+                        productService.findOneProductQty(order.getProduct().getProductId())).collect(Collectors.toList());
+                if(orderQtyCheck.isEmpty()){
+/*                    listOfCustomerOrder.stream().forEach(order->productService.updateProductQty((order.getProduct()
+                            .getProductId()),(productService.findOneProductQty(order.getProduct().getProductId())
+                            -order.getOrderQuantity())));*/
+                    for (Order order : listOfCustomerOrder) {
+                        Long productId = order.getProduct().getProductId();
+                        int updatedQty = productService.findOneProductQty(productId) - order.getOrderQuantity();
+                        productService.updateProductQty(productId, updatedQty);
+                    }
+
+                    List<Order_CheckedOut> checkedOutList =
                         listOfCustomerOrder.stream().map(Order -> new Order_CheckedOut(Order)).collect(Collectors.toList());
                 orderCheckedOutService.saveAllOrders(checkedOutList);
                 orderService.deleteOrderList(listOfCustomerOrder);
+                }else{
+                    String orderNames = "";
+                    for(Order a : orderQtyCheck) {
+                        if(orderNames.isEmpty()) {
+                            orderNames += a.getProduct().getProductName();
+                        } else {
+                            orderNames += ", " + a.getProduct().getProductName();
+                        }
+                    }
+                    msg="Cannot fulfill order. Fewer items in stock. Kindly review"+ orderNames +"items in your shopping bag";
+                }
             }
             System.out.printf("Total is %s", total);
             System.out.println(listOfCustomerOrder);
             System.out.println(listOfCustomerOrder.size());
             System.out.println(customer);
-            model.addAttribute("msg", "Payment received...Thanks for shopping with us");
+            model.addAttribute("msg", msg);
         }
         return "checkOutConfirmation";
     }

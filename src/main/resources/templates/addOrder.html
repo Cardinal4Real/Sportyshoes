@@ -22,6 +22,7 @@
         <input th:field="*{customer}" type="hidden" >
     <label><b>Quantity</b></label>
         <input placeholder="Enter order quantity" required th:field="*{orderQuantity}" type="text">
+        <p>Quantity left in stock: <span style="color:red;" th:text="${pquantity}"></span></p>
 
         <label><b>Price</b></label>
         <input placeholder="Enter price of product" required th:field="*{orderPrice}" th:readonly="true" type="text">
